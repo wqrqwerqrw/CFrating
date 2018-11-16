@@ -90,14 +90,10 @@ class Student(models.Model):
         res = list()
         rating = 1500
         x = self.conteststudent_set.all().order_by("contest__time")
-        #if(len(x)==0):return "empty"
         for con in x:
             rating += con.rating_change
-            #res.append(con.rating_change)
             res.append(rating)
-        res = res[::-1]
-        while len(res) > 5: res.pop()
-        res=res[::-1]
+        res = res[max(0, len(res) - 5):len(res)]
         return str(res)
 
     def __str__(self):
