@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ contest.name }}</title>
+</head>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<body>
+<br>
+<nav class="navbar navbar-default navbar-fixed-top">
+        <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'rating' %}">Rating</a></li>
+            <li><a href="{% url 'contests' %}">Contests</a></li>
+        </ul>
+</nav>
+<div class="jumbotron">
+<div class="page-header text-center">
+    <h2>
+        {{ contest.name }}
+    </h2>
+</div>
+<table style="width:80%;margin:0px auto;" class="table-striped" >
+	<tr align = "left" style="height:50px;" class="table-bordered">
+        <th class="col-md-1">#</th>
+		<th>班级</th>
+		<th>姓名</th>
+		<th>CF ID</th>
+        <th>rank</th>
+        <th>solved</th>
+        <th>rating change</th>
+	</tr>
+	{% for conteststudent in conteststudens %}
+        <tr style="height:50px;" class="table-bordered">
+            <td class="col-md-1">{{  forloop.counter }}</td>
+            <td>{{ conteststudent.student.classroom }}</td>
+            <td>{{ conteststudent.student.name }}</td>
+            <td >{{ conteststudent.student.cf_id }}</td>
+            <td>{{ conteststudent.rank }}</td>
+            <td>{{ conteststudent.solved }}</td>
+            <td style="color:{% if conteststudent.rating_change > 0 %}green{% else %}grey{% endif %};font-weight:bold;">
+                {% if conteststudent.rating_change > 0 %}+{% endif %}{{ conteststudent.rating_change }}
+            </td>
+        </tr>
+    {% endfor %}
+
+</table>
+</div>
+</body>
+</html>

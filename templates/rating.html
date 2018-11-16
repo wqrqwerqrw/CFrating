@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rating</title>
+</head>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<script src="https://cdn.bootcss.com/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+    x = function () {
+        var chartInstance = this.chart,
+            ctx = chartInstance.ctx;
+        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        this.data.datasets.forEach(function (dataset, i) {
+            var meta = chartInstance.controller.getDatasetMeta(i);
+            cnt = 0
+            meta.data.forEach(function (bar, index) {
+                if(cnt%2!=1){
+                var data = dataset.data[index];
+                ctx.fillStyle = "rgba(0,0,0,1)";
+                ctx.font = "bold 12px Arial";
+                if(bar._model.y>20)ctx.fillText(data, bar._model.x + 15, bar._model.y - 10);
+                else ctx.fillText(data, bar._model.x + 20, bar._model.y + 10);
+                }
+                cnt++;
+            });
+        });
+    };
+    opt = {
+        scales: {
+            xAxes: [
+                {
+                    display: false,
+                }
+            ], yAxes: [
+                {
+                    display: false
+                }
+            ]
+        },
+        events: false,
+        tooltips: {
+            enabled: false
+        },
+        hover: {
+            animationDuration: 0
+        },
+        animation: {
+            duration: 1,
+            onComplete: x,
+        }
+    };
+    xlabel = ["", "", "", "", "", "", "", "", "", "", "", ""];
+    Chart.defaults.global.legend.display = false;
+    Chart.defaults.scale.gridLines.display = false;
+</script>
+<body>
+<br>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+    <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'rating' %}">Rating</a></li>
+        <li><a href="{% url 'contests' %}">Contests</a></li>
+    </ul>
+</nav>
+<div class="jumbotron">
+    <table style="width:80%;margin:0px auto;" class="table-striped">
+        <tr align="left" style="height:50px;" class="table-bordered">
+            <th class="col-md-1">#</th>
+            <th>班级</th>
+            <th>姓名</th>
+            <th>CF ID</th>
+            <th>rating</th>
+            <th>最近五场</th>
+            <th>次数</th>
+        </tr>
+        {% for student in students %}{% if student.contest.count != 0 %}
+            <tr style="" class="table-bordered">
+                <td class="col-md-1">{{ forloop.counter }}</td>
+                <td>{{ student.classroom }}</td>
+                <td>{{ student.name }}</td>
+                <td style="color:{{ student.color }}">{{ student.cf_id }}</td>
+                <td>{{ student.cf_rating }}</td>
+                <td>
+                    <div style="width:150px;;position: relative;">
+                        <canvas id="canvas{{ student.pk }}" width="150" height="100"></canvas>
+                    </div>
+                </td>
+                <td>{{ student.contest.count }}</td>
+
+            </tr>
+            <script>
+                var ctx = document.getElementById("canvas{{ student.pk }}").getContext("2d");
+                var myChart = new Chart(ctx, {
+                    pointDot: false,
+                    type: 'line',
+                    data: {
+                        labels: xlabel,
+                        datasets: [{
+                            pointRadius: 2,
+                            fill: false,
+                            borderColor: "#CCCCCC",
+                            pointBackgroundColor: "black",
+                            data: {{ student.last_five }}
+                        }]
+                    },
+                    options: opt,
+                });
+            </script>
+        {% endif %}
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>

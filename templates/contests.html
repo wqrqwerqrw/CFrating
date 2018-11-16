@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contests</title>
+</head>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<body>
+<br>
+<nav class="navbar navbar-default navbar-fixed-top">
+        <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'rating' %}">Rating</a></li>
+            <li  class="active"><a href="{% url 'contests' %}">Contests</a></li>
+        </ul>
+</nav>
+<div class="jumbotron">
+<table style="width:80%;margin:0px auto;" class="table-striped" >
+	<tr align = "left" style="height:50;" class="table-bordered">
+        <th class="col-md-2">Contest ID</th>
+		<th  class="col-md-6">Name</th>
+        <th>Time</th>
+        <th>人数</th>
+	</tr>
+	{% for contest in contests %}
+        <tr style="height:50;" class="table-bordered">
+            <td class="col-md-2">{{  contest.contest_id }}</td>
+            <td><a href="{% url 'contest' contest.contest_id%}">{{ contest.name }}</a> </td>
+            <td>{{ contest.time|date:"Y-m-d H:i"}}</td>
+            <td>{{ contest.student_set.count }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+</div>
+</body>
+</html>
