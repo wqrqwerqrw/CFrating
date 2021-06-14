@@ -4,7 +4,7 @@ from .models import Student,Contest,ContestStudent
 def rating(request):
     return render(request,"rating.html",{"students" : Student.objects.all().order_by('-cf_rating')})
 def contests(request):
-    return render(request,"contests.html",{"contests" : Contest.objects.all().order_by('-time')})
+    return render(request,"contests.html",{"contests" : Contest.objects.all().order_by('-start_time')})
 def contest(request,contest_id):
     return render(request,"contest.html",
                   {"conteststudens" : ContestStudent.objects.filter(contest__contest_id=contest_id).order_by('rank'),

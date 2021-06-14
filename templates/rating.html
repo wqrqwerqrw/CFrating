@@ -62,7 +62,7 @@
 <body>
 <br>
 <nav class="navbar navbar-default navbar-fixed-top">
-    <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+    <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
     <ul class="nav navbar-nav">
         <li class="active"><a href="{% url 'rating' %}">Rating</a></li>
         <li><a href="{% url 'contests' %}">Contests</a></li>
@@ -72,20 +72,25 @@
     <table style="width:80%;margin:0px auto;" class="table-striped">
         <tr align="left" style="height:50px;" class="table-bordered">
             <th class="col-md-1">#</th>
-            <th>班级</th>
+            <th>年级</th>
             <th>姓名</th>
             <th class="col-md-2">CF ID</th>
             <th class="col-md-1">rating</th>
             <th class="col-md-1">次数</th>
             <th>最近五场</th>
         </tr>
-        {% for student in students %}{% if student.contest.count != 0 %}
+        {% for student in students %}
             <tr style="" class="table-bordered">
                 <td class="col-md-1">{{ forloop.counter }}</td>
-                <td>{{ student.classroom }}</td>
+                <td>{{ student.grade }}</td>
                 <td>{{ student.name }}</td>
                 <td class="col-md-2" style="color:{{ student.color }}">{{ student.cf_id }}</td>
+        {% if student.contest.count != 0 %}
                 <td class="col-md-1">{{ student.cf_rating }}</td>
+        {% else %}
+                <td class="col-md-1">快去打</td>
+        {% endif %}
+    
                 <td class="col-md-1">{{ student.contest.count }}</td>
                 <td>
                     <div style="width:300px;;position: relative;">
@@ -112,7 +117,6 @@
                     options: opt,
                 });
             </script>
-        {% endif %}
         {% endfor %}
     </table>
 </div>

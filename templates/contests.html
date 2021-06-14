@@ -13,7 +13,7 @@
 <body>
 <br>
 <nav class="navbar navbar-default navbar-fixed-top">
-        <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+        <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
         <ul class="nav navbar-nav">
             <li><a href="{% url 'rating' %}">Rating</a></li>
             <li  class="active"><a href="{% url 'contests' %}">Contests</a></li>
@@ -23,7 +23,7 @@
 <table style="width:80%;margin:0px auto;" class="table-striped" >
 	<tr align = "left" style="height:50;" class="table-bordered">
         <th class="col-md-2">Contest ID</th>
-		<th  class="col-md-6">Name</th>
+		<th class="col-md-6">Name</th>
         <th>Time</th>
         <th>人数</th>
 	</tr>
@@ -31,7 +31,7 @@
         <tr style="height:50;" class="table-bordered">
             <td class="col-md-2">{{  contest.contest_id }}</td>
             <td><a href="{% url 'contest' contest.contest_id%}">{{ contest.name }}</a> </td>
-            <td>{{ contest.time|date:"Y-m-d H:i"}}</td>
+            <td>{{ contest.start_time|date:"Y-m-d H:i"}}</td>
             <td>{{ contest.student_set.count }}</td>
         </tr>
     {% endfor %}

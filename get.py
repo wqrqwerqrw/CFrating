@@ -13,17 +13,14 @@ from web.models import Contest,Student
 
 
 def main():
-    while True:
-        if Student.objects.all().count() != 0:
-            x = Student.objects.all().order_by('last_update_time')[0]
-            # x = Student.objects.get(cf_id='ZZHzzh0_0')
-            print(str(x).encode('utf-8'))
+    if Student.objects.all().count() != 0:
+        for x in Student.objects.all().order_by('last_update_time'):
+            print(str(x).encode('utf-8'),end=' : ')
             try:
                 x.update()
+                print('get success')
             except:
-                pass
-        sleep(120)
-
+                print('get failed')
 
 if __name__ == "__main__":
     main()

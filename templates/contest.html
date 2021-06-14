@@ -13,7 +13,7 @@
 <body>
 <br>
 <nav class="navbar navbar-default navbar-fixed-top">
-        <a href="#" class="navbar-brand"><strong>BUCT ACM</strong></a>
+        <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
         <ul class="nav navbar-nav">
             <li><a href="{% url 'rating' %}">Rating</a></li>
             <li><a href="{% url 'contests' %}">Contests</a></li>
@@ -28,7 +28,7 @@
 <table style="width:80%;margin:0px auto;" class="table-striped" >
 	<tr align = "left" style="height:50px;" class="table-bordered">
         <th class="col-md-1">#</th>
-		<th>班级</th>
+		<th>年级</th>
 		<th>姓名</th>
 		<th>CF ID</th>
         <th>rank</th>
@@ -38,7 +38,7 @@
 	{% for conteststudent in conteststudens %}
         <tr style="height:50px;" class="table-bordered">
             <td class="col-md-1">{{  forloop.counter }}</td>
-            <td>{{ conteststudent.student.classroom }}</td>
+            <td>{{ conteststudent.student.grade }}</td>
             <td>{{ conteststudent.student.name }}</td>
             <td >{{ conteststudent.student.cf_id }}</td>
             <td>{{ conteststudent.rank }}</td>
