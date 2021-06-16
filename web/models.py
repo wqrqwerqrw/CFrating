@@ -8,6 +8,7 @@ from django.utils import timezone
 from bs4 import BeautifulSoup
 
 # Create your models here.
+
 class Contest(models.Model):
     contest_id = models.IntegerField()
     name = models.CharField(max_length=200)
@@ -43,7 +44,7 @@ class Student(models.Model):
             contest = Contest.objects.get_or_create(contest_id=contest_id, name=contest_name, start_time=contest_time)
             contest = contest[0]
 
-            rank = int(td[3].find('a').get_text().strip())
+            rank = int(td[3].get_text().strip())
             solved = int(td[4].find('a').get_text().strip())
             rating_change = int(td[5].find('span').get_text().strip())
             new_rating = int(td[6].get_text().strip())
