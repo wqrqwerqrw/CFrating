@@ -14,7 +14,7 @@ git clone https://github.com/maggch97/CFrating.git
 # 安装python3以及pip3
 sudo apt install python3 python3-pip
 # 安装django以及bootstrap3
-sudo pip3 install django django-bootstrap3
+sudo pip3 install django django-bootstrap5
 # 建立数据库
 cd CFrating
 python3 manage.py makemigrations
