@@ -1,42 +1,54 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Contests</title>
+    <title>contests</title>
 </head>
-{# Load the tag library #}
-{% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
+{% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-<body>
-<br>
-<nav class="navbar navbar-default navbar-fixed-top">
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+    <div class="container-fluid">
         <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
-        <ul class="nav navbar-nav">
-            <li><a href="{% url 'rating' %}">Rating</a></li>
-            <li  class="active"><a href="{% url 'contests' %}">Contests</a></li>
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-tabs">
+                <li class="nav-item">
+                    <a class = "nav-link" href="{% url 'rating' %}">Rating</a>
+                </li>
+                <li class="nav-item">
+                    <a class = "nav-link active" href="{% url 'contests' %}">Contests</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
-<div class="jumbotron">
-<table style="width:80%;margin:0px auto;" class="table-striped" >
-	<tr align = "left" style="height:50;" class="table-bordered">
-        <th class="col-md-2">Contest ID</th>
-		<th class="col-md-6">Name</th>
-        <th>Time</th>
-        <th>人数</th>
-	</tr>
-	{% for contest in contests %}
-        <tr style="height:50;" class="table-bordered">
-            <td class="col-md-2">{{  contest.contest_id }}</td>
-            <td><a href="{% url 'contest' contest.contest_id%}">{{ contest.name }}</a> </td>
+
+<br>
+<br>
+<br>
+
+<table style="width:80%;margin:0px auto;" class="table align-middle table-striped border">
+    <thead>
+    <th class="col-md-2">Contest ID</th>
+    <th class="col-md-6">Name</th>
+    <th class="col-md-2">Time</th>
+    <th class="col-md-2">人数</th>
+    </thead>
+    <tbody>
+   	{% for contest in contests %}
+        <tr style="height: 50px">
+            <td>{{  contest.contest_id }}</td>
+            <td><a href="{% url 'contest' contest.contest_id%}" style="text-decoration: none;">{{ contest.name }}</a> </td>
             <td>{{ contest.start_time|date:"Y-m-d H:i"}}</td>
             <td>{{ contest.student_set.count }}</td>
         </tr>
     {% endfor %}
-
+    </tbody>
 </table>
-</div>
+
 </body>
 </html>

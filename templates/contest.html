@@ -1,55 +1,72 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>{{ contest.name }}</title>
+    <title>contests</title>
 </head>
-{# Load the tag library #}
-{% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
+{% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
 <body>
-<br>
-<nav class="navbar navbar-default navbar-fixed-top">
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+    <div class="container-fluid">
         <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
-        <ul class="nav navbar-nav">
-            <li><a href="{% url 'rating' %}">Rating</a></li>
-            <li><a href="{% url 'contests' %}">Contests</a></li>
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-tabs">
+                <li class="nav-item">
+                    <a class = "nav-link" href="{% url 'rating' %}">Rating</a>
+                </li>
+                <li class="nav-item">
+                    <a class = "nav-link" href="{% url 'contests' %}">Contests</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
-<div class="jumbotron">
-<div class="page-header text-center">
-    <h2>
-        {{ contest.name }}
-    </h2>
+<br>
+<br>
+<br>
+
+<div class="page-header text-center h1 text-secondary">
+    {{ contest.name }}
 </div>
-<table style="width:80%;margin:0px auto;" class="table-striped" >
-	<tr align = "left" style="height:50px;" class="table-bordered">
-        <th class="col-md-1">#</th>
-		<th>年级</th>
-		<th>姓名</th>
-		<th>CF ID</th>
-        <th>rank</th>
-        <th>solved</th>
-        <th>rating change</th>
-	</tr>
-	{% for conteststudent in conteststudens %}
+
+<table style="width:80%;margin:0px auto;" class="table align-middle table-striped border">
+    <thead>
+    <th>#</th>
+    <th>年级</th>
+    <th>姓名</th>
+    <th>CFID</th>
+    <th>rank</th>
+    <th>solved</th>
+    <th>rating change</th>
+    <th>new rating</th>
+    </thead>
+    <tbody>
+    {% for conteststudent in conteststudens %}
         <tr style="height:50px;" class="table-bordered">
             <td class="col-md-1">{{  forloop.counter }}</td>
             <td>{{ conteststudent.student.grade }}</td>
             <td>{{ conteststudent.student.name }}</td>
-            <td >{{ conteststudent.student.cf_id }}</td>
+{#            <td style="color:{{ conteststudent.student.color }};font-family: Monaco, monospace" >{{ conteststudent.student.cf_id }}</td>#}
+            <td style=";font-family: Monaco, monospace;">
+                <a href="{% url 'student' conteststudent.student.cf_id %}" style="text-decoration: none;color:{{ conteststudent.student.color }}">{{ conteststudent.student.cf_id }}</a>
+            </td>
+
             <td>{{ conteststudent.rank }}</td>
             <td>{{ conteststudent.solved }}</td>
             <td style="color:{% if conteststudent.rating_change > 0 %}green{% else %}grey{% endif %};font-weight:bold;">
                 {% if conteststudent.rating_change > 0 %}+{% endif %}{{ conteststudent.rating_change }}
             </td>
+            <td>{{ conteststudent.new_rating }}</td>
         </tr>
     {% endfor %}
-
+    </tbody>
 </table>
-</div>
+
 </body>
 </html>

@@ -1,32 +1,34 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
+
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
     <title>Rating</title>
 </head>
-{# Load the tag library #}
-{% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<script src="https://cdn.bootcss.com/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
 <script>
-    x = function () {
+     x = function () {
         var chartInstance = this.chart,
             ctx = chartInstance.ctx;
-        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         this.data.datasets.forEach(function (dataset, i) {
             var meta = chartInstance.controller.getDatasetMeta(i);
             meta.data.forEach(function (bar, index) {
                 var data = dataset.data[index];
-                ctx.fillStyle = "rgba(0,0,0,1)";
                 ctx.font = "bold 12px Arial";
-                let Y = bar._model.y -=5
-                if(Y<20)Y+=20
+                let Y = bar._model.y
+                if(Y<15)Y+=15
                 let X = bar._model.x-15
-                if(X<40)X+=28
+                if(index == 0) X += 30
                 ctx.fillText(data,X,Y);
             });
         });
@@ -55,70 +57,85 @@
             onComplete: x,
         }
     };
-    xlabel = ["", "", "", "", "",];
     Chart.defaults.global.legend.display = false;
     Chart.defaults.scale.gridLines.display = false;
 </script>
-<body>
-<br>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
-    <ul class="nav navbar-nav">
-        <li class="active"><a href="{% url 'rating' %}">Rating</a></li>
-        <li><a href="{% url 'contests' %}">Contests</a></li>
-    </ul>
-</nav>
-<div class="jumbotron">
-    <table style="width:80%;margin:0px auto;" class="table-striped">
-        <tr align="left" style="height:50px;" class="table-bordered">
-            <th class="col-md-1">#</th>
-            <th>年级</th>
-            <th>姓名</th>
-            <th class="col-md-2">CF ID</th>
-            <th class="col-md-1">rating</th>
-            <th class="col-md-1">次数</th>
-            <th>最近五场</th>
-        </tr>
-        {% for student in students %}
-            <tr style="" class="table-bordered">
-                <td class="col-md-1">{{ forloop.counter }}</td>
-                <td>{{ student.grade }}</td>
-                <td>{{ student.name }}</td>
-                <td class="col-md-2" style="color:{{ student.color }}">{{ student.cf_id }}</td>
-        {% if student.contest.count != 0 %}
-                <td class="col-md-1">{{ student.cf_rating }}</td>
-        {% else %}
-                <td class="col-md-1">快去打</td>
-        {% endif %}
-    
-                <td class="col-md-1">{{ student.contest.count }}</td>
-                <td>
-                    <div style="width:300px;;position: relative;">
-                        <canvas id="canvas{{ student.pk }}" width="400" height="100"></canvas>
-                    </div>
-                </td>
 
-            </tr>
-            <script>
-                var ctx = document.getElementById("canvas{{ student.pk }}").getContext("2d");
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-tabs">
+                <li class="nav-item">
+                    <a class = "nav-link active" href="{% url 'rating' %}">Rating</a>
+                </li>
+                <li class="nav-item">
+                    <a class = "nav-link" href="{% url 'contests' %}">Contests</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+<br>
+<table style="width:80%;margin:0px auto;" class="table align-middle table-striped border">
+    <thead>
+    <th class="col-md-1">#</th>
+    <th class="col-md-1">年级</th>
+    <th class="col-md-1">姓名</th>
+    <th class="col-md-3">CF ID</th>
+    <th class="col-md-1">rating</th>
+    <th class="col-md-1">次数</th>
+    <th class="col-md-3">最近五场</th>
+    </thead>
+    <tbody>
+    {% for student in students %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.name }}</td>
+            <td style=";font-family: Monaco, monospace;">
+                <a href="{% url 'student' student.cf_id %}" style="text-decoration: none;color:{{ student.color }}">{{ student.cf_id }}</a>
+            </td>
+{#            <td style="color:{{ student.color }};font-family: Monaco, monospace">{{ student.cf_id }}</td>#}
+            {% if student.contest.count != 0 %}
+                <td>{{ student.cf_rating }}</td>
+            {% else %}
+                <td>快去打</td>
+            {% endif %}
+
+            <td>{{ student.contest.count }}</td>
+            <td>
+                <div style="width:300px;position: relative;">
+                    <canvas id="canvas-{{ student.cf_id }}" width="400" height="100"></canvas>
+                </div>
+            </td>
+        </tr>
+        <script>
+                var ctx = document.getElementById("canvas-{{ student.cf_id }}").getContext("2d");
                 var myChart = new Chart(ctx, {
                     pointDot: false,
                     type: 'line',
                     data: {
-                        labels: xlabel,
+                        labels: ['','','','',''],
                         datasets: [{
                             pointRadius: 2,
                             fill: false,
-                            borderColor: "#CCCCCC",
                             pointBackgroundColor: "black",
                             data: {{ student.last_five }}
                         }]
                     },
-                    options: opt,
+                    options: opt
                 });
-            </script>
-        {% endfor %}
-    </table>
-</div>
+        </script>
+    {% endfor %}
+    </tbody>
+
+</table>
+
 </body>
 </html>
