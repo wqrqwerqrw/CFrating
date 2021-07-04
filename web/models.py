@@ -93,7 +93,6 @@ class Student(models.Model):
             res.append(contest.new_rating)
 
         res.reverse()
-        print(res)
         return str(res)
 
     def __str__(self):
