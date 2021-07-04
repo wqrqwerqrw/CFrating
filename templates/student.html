@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ student.name }}</title>
+</head>
+
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand"><strong>CUST ACM</strong></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-tabs">
+                <li class="nav-item">
+                    <a class = "nav-link" href="{% url 'rating' %}">Rating</a>
+                </li>
+                <li class="nav-item">
+                    <a class = "nav-link active" href="{% url 'contests' %}">Contests</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+<br>
+
+<div class="page-header text-center h1 text-secondary">
+    {{ student.name }} <span style="color: {{ student.color }}">{{ student.cf_id }}</span>
+</div>
+
+<table style="width:80%;margin:0px auto;" class="table align-middle table-striped border">
+    <thead>
+    <th class="col-md-1">Contest ID</th>
+    <th class="col-md-5">Name</th>
+    <th class="col-md-2">Time</th>
+    <th class="col-md-2">rating change</th>
+    <th class="col-md-1">new rating</th>
+    </thead>
+    <tbody>
+   	{% for conteststudent in conteststudents %}
+        <tr style="height: 50px">
+            <td>{{ conteststudent.contest.contest_id }}</td>
+            <td><a href="{% url 'contest' conteststudent.contest.contest_id%}" style="text-decoration: none;">{{ conteststudent.contest.name }}</a> </td>
+            <td>{{ conteststudent.contest.start_time|date:"Y-m-d H:i"}}</td>
+            <td style="color:{% if conteststudent.rating_change > 0 %}green{% else %}grey{% endif %};font-weight:bold;">
+                {% if conteststudent.rating_change > 0 %}+{% endif %}{{ conteststudent.rating_change }}
+            </td>
+            <td>{{ conteststudent.new_rating }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
